@@ -1,0 +1,1 @@
+Get-Content ".\src\helper.dirname.ts" | Set-Content ".\src\tmp" && Add-Content ".\src\tmp" -Value (Get-Content ".\dist\test-prisma-gql\server\server.mjs") && Move-Item -Force ".\src\tmp" -Destination ".\dist\test-prisma-gql\server\server.mjs"

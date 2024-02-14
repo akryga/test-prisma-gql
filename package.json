@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && pwsh.exe ./helper.ps1",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:test-prisma-gql": "node dist/test-prisma-gql/server/server.mjs"

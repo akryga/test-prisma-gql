@@ -1,2 +1,4 @@
 <p>users works!</p>
-<button (click)="refresh()">click</button>
+<button (click)="refreshUsers()">click</button>
+
+<li *ngFor="let u of users; index as i">{{u.id}} - {{u.name}} {{u.lastname}} : {{ u.created|date:'medium': 'ru-RU' }}</li>

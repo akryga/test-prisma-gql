@@ -1,17 +1,29 @@
 import { Component } from '@angular/core';
+import { NgFor, DatePipe } from '@angular/common';
+import { User } from '../../../prisma/generated/type-graphql';
+
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [],
+  imports: [NgFor,DatePipe],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
+
 export class UsersComponent {
-  refresh() {
-    this.getData(encodeURI("/graphql"),{query:"{ users { id  name CREATED }}"}).then((data) => {
-  console.log(data); // JSON data parsed by `response.json()` call
-});
+  queries = {
+    users: { query:"{ users { id  name lastname created }}" },
+    groups: { query:"{groups {  id parent_group_id  title  rights } }"},
+    emails: {query: "{user_emails{email id user_id}}"}
+  }
+  
+  users: User[] = []
+
+  refreshUsers() {
+    this.getData(encodeURI("/graphql"),this.queries.users).then((data) => {
+      this.users = data.data.users
+    });
 
   }
   async getData(url = "", data = {}) {

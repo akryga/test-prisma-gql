@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../prisma/generated/type-graphql"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model group {
+  id          Int     @id @default(autoincrement())
+  pid         Int     @default(0)
+  title       String? @db.VarChar(45)
+  desc        String? @db.Text
+  group       group   @relation("groupTogroup", fields: [pid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_group1")
+  other_group group[] @relation("groupTogroup")
+  user        user[]
+
+  @@index([pid], map: "fk_group_group1_idx")
+}
+
+model user {
+  id         BigInt       @id @default(autoincrement())
+  name       String?      @db.VarChar(45)
+  meta       String?      @db.LongText
+  CREATED    DateTime     @default(now()) @db.Timestamp(0)
+  UPDATED    DateTime     @default(now()) @db.Timestamp(0)
+  group_id   Int?
+  group      group?       @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_group1")
+  user_email user_email[]
+
+  @@index([group_id], map: "fk_user_group1_idx")
+}
+
+model user_email {
+  id      Int     @default(autoincrement())
+  email   String? @db.VarChar(45)
+  user_id BigInt
+  user    user    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_email_user1")
+
+  @@id([id, user_id])
+  @@index([user_id], map: "fk_user_email_user1_idx")
+}

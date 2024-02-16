@@ -1,19 +1,29 @@
-import { Component } from '@angular/core';
-import { NgFor, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { NgFor, NgIf, DatePipe,TitleCasePipe } from '@angular/common';
 import { User } from '../../../prisma/generated/type-graphql';
 
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [NgFor,DatePipe],
+  imports: [NgFor, DatePipe, NgIf, TitleCasePipe],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
 
-export class UsersComponent {
+export class UsersComponent implements OnInit {
+ 
+  constructor(){
+    // this.getData(encodeURI("/graphql"),this.queries.users).then((data) => {
+    //   this.users = data.data.users
+    // });
+  }
+
+  ngOnInit(): void {
+    // this.refreshUsers();
+  }
   queries = {
-    users: { query:"{ users { id  name lastname created }}" },
+    users: { query:"{ users { id  name lastname created nchildren user_email{email} }}" },
     groups: { query:"{groups {  id parent_group_id  title  rights } }"},
     emails: {query: "{user_emails{email id user_id}}"}
   }
@@ -21,11 +31,11 @@ export class UsersComponent {
   users: User[] = []
 
   refreshUsers() {
-    this.getData(encodeURI("/graphql"),this.queries.users).then((data) => {
-      this.users = data.data.users
+    this.getData(encodeURI("/graphql"), this.queries.users).then((d) => {
+      this.users = d.data.users
     });
-
   }
+
   async getData(url = "", data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {

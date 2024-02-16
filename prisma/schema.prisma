@@ -33,6 +33,7 @@ model user {
   created    DateTime     @default(now()) @db.Timestamp(0)
   updated    DateTime     @default(now()) @db.Timestamp(0)
   group_id   Int?
+  nchildren  Int          @default(0) @db.TinyInt
   group      group?       @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_group1")
   user_email user_email[]
 

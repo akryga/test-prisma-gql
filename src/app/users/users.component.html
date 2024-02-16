@@ -1,4 +1,10 @@
 <p>users works!</p>
 <button (click)="refreshUsers()">click</button>
 
-<li *ngFor="let u of users; index as i">{{u.id}} - {{u.name}} {{u.lastname}} : {{ u.created|date:'medium': 'ru-RU' }}</li>
+<div class="pill-group" *ngIf="users.length>0">
+    <a href="" class="pill" *ngFor="let u of users; index as i">
+        <span>
+            #{{u.id}} - {{u['name']|titlecase }} {{u['lastname']|titlecase }} : {{ u.created|date:'medium': 'ru-RU' }} : children -> {{u.nchildren }}
+        </span>
+    </a>
+</div>
